@@ -27,7 +27,7 @@ MANIFEST
 venv/
 ENV/
 env/
-.venv
+.venv/
 env.bak/
 venv.bak/
 
@@ -38,6 +38,7 @@ db.sqlite3
 db.sqlite3-journal
 /media
 /staticfiles
+/myproject/staticfiles/
 
 # IDE
 .vscode/
@@ -45,25 +46,20 @@ db.sqlite3-journal
 *.swp
 *.swo
 *~
-.DS_Store
 
 # Node (Frontend)
 node_modules/
 npm-debug.log
 yarn-error.log
-.env
-.env.local
-.env.*.local
-build/
-dist/
 
 # OS
 Thumbs.db
 .DS_Store
 
-# IDE specific
-.vscode/settings.json
-.idea/workspace.xml
+# Environment variables (don't commit)
+.env
+.env.local
+.env.*.local
 
 # Testing
 .pytest_cache/
@@ -73,8 +69,3 @@ htmlcov/
 # Temp files
 *.tmp
 *.temp
-
-# Environment variables (don't commit)
-.env
-.env.local
-.env.*.local
