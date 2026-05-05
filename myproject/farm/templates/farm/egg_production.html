@@ -1,0 +1,73 @@
+{% extends 'farm/base.html' %}
+
+{% block title %}Egg Production - Farm Inventory{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>🥚 Egg Production</h1>
+        <p>Review recent egg production and download the report as a PDF.</p>
+    </div>
+    <div class="button-group">
+        <a href="{% url 'farm:export_egg_production_pdf' %}" class="btn btn-primary">
+            📄 Download Egg Production PDF
+        </a>
+    </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="summary-grid">
+    <div class="summary-card">
+        <div class="summary-card-icon">🥚</div>
+        <div class="summary-card-label">Today's Egg Count</div>
+        <div class="summary-card-value">{{ today_total }}</div>
+        <div class="summary-card-detail">Weekly total: {{ weekly_total }} eggs</div>
+    </div>
+    <div class="summary-card">
+        <div class="summary-card-icon">📅</div>
+        <div class="summary-card-label">Recent Activity</div>
+        <div class="summary-card-value">{{ recent_activities|length }}</div>
+        <div class="summary-card-detail">Last 7 days of operations</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Recent Activity History</h3>
+    </div>
+    <div class="card-body">
+        {% if recent_activities %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Activity</th>
+                        <th>Animal</th>
+                        <th>Recorded By</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in recent_activities %}
+                        <tr>
+                            <td>{{ activity.date|date:"M d, Y" }}</td>
+                            <td>{{ activity.time|time:"H:i" }}</td>
+                            <td>{{ activity.get_activity_type_display }}</td>
+                            <td>{{ activity.animal.name|default:"N/A" }}</td>
+                            <td>{{ activity.employee.name|default:"System" }}</td>
+                            <td>{{ activity.notes|default:"No details" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <div class="empty-state-title">No Activity Recorded</div>
+                <div class="empty-state-text">Recent farm activity will appear here once it is logged.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
