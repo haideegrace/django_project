@@ -13,12 +13,13 @@ export const useFetch = (url, options = {}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const optionsRef = useRef(options);
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.get(url, options);
+      const response = await apiClient.get(url, optionsRef.current);
       // Auto-unwrap paginated responses
       const result = response.data?.results !== undefined ? response.data.results : response.data;
       setData(result);
@@ -27,7 +28,7 @@ export const useFetch = (url, options = {}) => {
     } finally {
       setLoading(false);
     }
-  }, [url, options]);
+  }, [url]);
 
   useEffect(() => {
     fetchData();
