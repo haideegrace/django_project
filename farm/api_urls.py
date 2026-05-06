@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 from .api_views import (
     AnimalViewSet, EggProductionViewSet, FeedViewSet, FeedUsageViewSet,
     MortalityViewSet, ActivityLogViewSet, EmployeeViewSet, NotificationViewSet,
-    UserProfileViewSet, DashboardViewSet
+    UserProfileViewSet, DashboardViewSet, LoginView, LogoutView, CurrentUserView
 )
 
 # Create a router and register viewsets
@@ -26,5 +26,8 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 # API URLs
 urlpatterns = [
     path('', include(router.urls)),
+    path('auth/login/', LoginView.as_view(), name='api-login'),
+    path('auth/logout/', LogoutView.as_view(), name='api-logout'),
+    path('auth/user/', CurrentUserView.as_view(), name='api-current-user'),
     path('auth/', include('rest_framework.urls')),
 ]

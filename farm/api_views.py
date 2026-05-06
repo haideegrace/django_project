@@ -503,3 +503,83 @@ class DashboardViewSet(viewsets.ViewSet):
 
 # Import F for filtering
 from django.db.models import F
+
+
+# ===== AUTHENTICATION VIEWS (Token-based for cross-domain React frontend) =====
+
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+
+
+class LoginView(APIView):
+    """
+    API endpoint for token-based login.
+    Accepts username and password, returns auth token.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response(
+                {'error': 'Please provide both username and password.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            return Response(
+                {'error': 'Invalid username or password.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Create or get existing token
+        token, _ = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'token': token.key,
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+        })
+
+
+class LogoutView(APIView):
+    """
+    API endpoint for token-based logout.
+    Deletes the user's auth token.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+        except Exception:
+            pass
+        return Response({'message': 'Successfully logged out.'})
+
+
+class CurrentUserView(APIView):
+    """
+    API endpoint to get the currently authenticated user's info.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        })
