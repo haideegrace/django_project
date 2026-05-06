@@ -2,9 +2,9 @@
  * Egg Production Component - Display and record egg production
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFetch, usePost, usePoll } from '../hooks';
-import { eggProductionAPI, animalAPI } from '../services/apiService';
+import { eggProductionAPI } from '../services/apiService';
 import './EggProduction.css';
 
 export const EggProduction = () => {
@@ -36,7 +36,7 @@ export const EggProduction = () => {
       });
       refetch();
       alert('Egg production recorded successfully!');
-    } catch (error) {
+    } catch (_error) {
       alert('Error recording egg production');
     }
   };
