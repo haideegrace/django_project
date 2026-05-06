@@ -3,15 +3,30 @@
  */
 
 import React, { useState } from 'react';
-import { useFetch, useDebounce } from '../hooks';
+import { useFetch, usePost, useDebounce } from '../hooks';
 import { animalAPI } from '../services/apiService';
 import './Animals.css';
 
 export const Animals = () => {
   const { data: animals, loading, error, refetch } = useFetch('/animals/');
+  const { post, loading: posting } = usePost();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [newAnimal, setNewAnimal] = useState({ name: '', category: 'chicken', total_count: '' });
   const debouncedSearch = useDebounce(searchTerm, 300);
+
+  const handleAddAnimal = async (e) => {
+    e.preventDefault();
+    try {
+      await post('/animals/', newAnimal);
+      setNewAnimal({ name: '', category: 'chicken', total_count: '' });
+      setShowForm(false);
+      refetch();
+    } catch (_err) {
+      alert('Error adding animal');
+    }
+  };
 
   // Filter animals
   const filteredAnimals = (animals || []).filter(animal => {
@@ -35,8 +50,65 @@ export const Animals = () => {
     <div className="animals">
       <div className="animals-header">
         <h1>🐔 Animals & Inventory</h1>
-        <button onClick={refetch} className="btn-refresh">🔄 Refresh</button>
+        <div>
+          <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{marginRight: '8px'}}>
+            {showForm ? '✕ Cancel' : '+ Add Animal'}
+          </button>
+          <button onClick={refetch} className="btn-refresh">🔄 Refresh</button>
+        </div>
       </div>
+
+      {/* Add Animal Form */}
+      {showForm && (
+        <div className="record-form-container" style={{marginBottom: '20px'}}>
+          <h2>Add New Animal</h2>
+          <form onSubmit={handleAddAnimal} className="record-form">
+            <div className="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                value={newAnimal.name}
+                onChange={(e) => setNewAnimal({ ...newAnimal, name: e.target.value })}
+                required
+                placeholder="e.g. Rhode Island Red"
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label>Category</label>
+              <select
+                value={newAnimal.category}
+                onChange={(e) => setNewAnimal({ ...newAnimal, category: e.target.value })}
+                className="form-input"
+              >
+                <option value="chicken">Chicken</option>
+                <option value="duck">Duck</option>
+                <option value="goose">Goose</option>
+                <option value="turkey">Turkey</option>
+                <option value="quail">Quail</option>
+                <option value="pigs">Pigs</option>
+                <option value="goat">Goat</option>
+                <option value="fish">Fish</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Count</label>
+              <input
+                type="number"
+                min="0"
+                value={newAnimal.total_count}
+                onChange={(e) => setNewAnimal({ ...newAnimal, total_count: e.target.value })}
+                required
+                placeholder="0"
+                className="form-input"
+              />
+            </div>
+            <button type="submit" disabled={posting} className="btn btn-primary">
+              {posting ? 'Adding...' : 'Add Animal'}
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Search and Filter */}
       <div className="animals-controls">
@@ -78,7 +150,7 @@ export const Animals = () => {
 
       {filteredAnimals.length === 0 && (
         <div className="empty-state">
-          <p>No animals found</p>
+          <p>No animals found. Click "+ Add Animal" to get started!</p>
         </div>
       )}
     </div>

@@ -35,4 +35,39 @@ if u and p:
     print(f'All users: {list(User.objects.values_list(\"username\", \"is_active\"))}')
 "
 
+# Seed default animals
+python -c "
+import os, django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+django.setup()
+from farm.models import Animal
 
+animals = [
+    ('chicken', 'Broiler Chicken'),
+    ('chicken', 'Layer Chicken'),
+    ('duck',    'Mallard Duck'),
+    ('duck',    'Muscovy Duck'),
+    ('goose',   'Embden Goose'),
+    ('turkey',  'Bronze Turkey'),
+    ('quail',   'Japanese Quail'),
+    ('pigs',    'Yorkshire Pig'),
+    ('pigs',    'Duroc Pig'),
+    ('goat',    'Boer Goat'),
+    ('fish',    'Tilapia'),
+    ('fish',    'Catfish'),
+]
+
+created = 0
+for category, name in animals:
+    obj, was_created = Animal.objects.get_or_create(
+        name=name,
+        defaults={'category': category, 'total_count': 0}
+    )
+    if was_created:
+        created += 1
+        print(f'  Created: {name} ({category})')
+    else:
+        print(f'  Exists:  {name} ({category})')
+
+print(f'Animal seeding done — {created} new, {len(animals) - created} already existed.')
+"
