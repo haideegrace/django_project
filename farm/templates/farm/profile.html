@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWNER 👑</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background-image: url('https://source.unsplash.com/featured/?farm,animals,pigs'), linear-gradient(135deg, #4CAF50, #45a049);
+            background-size: cover, cover;
+            background-position: center, center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 0 auto;
+            color: black;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            color: green;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <h1>OWNER 👑</h1>
+
+        {% if profile.photo or profile.photo_url %}
+            <div class="profile-photo-preview">
+                <img src="{% if profile.photo %}{{ profile.photo.url }}{% else %}{{ profile.photo_url }}{% endif %}" alt="Profile Photo">
+            </div>
+        {% endif %}
+
+        <!-- READ-ONLY INFO VIEW -->
+        <div id="info-view" class="info-view">
+            <div class="info-section">
+                <label>Email</label>
+                <p>{{ user.email }}</p>
+            </div>
+            <div class="info-section">
+                <label>First Name</label>
+                <p>{{ user.first_name|default:"Not set" }}</p>
+            </div>
+            <div class="info-section">
+                <label>Last Name</label>
+                <p>{{ user.last_name|default:"Not set" }}</p>
+            </div>
+            <div class="info-section">
+                <label>Phone Number</label>
+                <p>{{ profile.phone_number|default:"Not set" }}</p>
+            </div>
+            <button type="button" onclick="toggleEditMode()" class="edit-btn">Edit Profile</button>
+        </div>
+
+        <!-- EDIT FORM (HIDDEN BY DEFAULT) -->
+        <div id="edit-form" class="edit-form" style="display: none;">
+            <h2>Edit Profile</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label class="help-text">Email</label>
+                <input type="email" name="email" placeholder="Email" value="{{ user.email }}" readonly>
+                <label class="help-text">First Name</label>
+                <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}">
+                <label class="help-text">Last Name</label>
+                <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}">
+                <label class="help-text">Phone Number</label>
+                <input type="text" name="phone_number" placeholder="Phone Number" value="{{ profile.phone_number }}">
+                <label class="help-text" for="photo">Upload a wallet-size headshot with your face centered. The system will resize the image for the profile card.</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+                {% if profile.photo %}
+                    <label class="delete-checkbox"><input type="checkbox" name="delete_photo"> Delete current profile photo</label>
+                {% endif %}
+                <input type="url" name="photo_url" placeholder="Image URL (optional)" value="{{ profile.photo_url }}">
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="toggleEditMode()" class="cancel-btn">Cancel</button>
+            </form>
+        </div>
+
+        <h2>Change Password</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="change_password" value="1">
+            <label for="{{ form.old_password.id_for_label }}">Current Password</label>
+            {{ form.old_password }}
+            {% if form.old_password.errors %}
+                <div class="error-message">{{ form.old_password.errors }}</div>
+            {% endif %}
+
+            <label for="{{ form.new_password1.id_for_label }}">New Password</label>
+            {{ form.new_password1 }}
+            <div class="hint-text">At least 8 characters, mix letters and numbers.</div>
+            {% if form.new_password1.errors %}
+                <div class="error-message">{{ form.new_password1.errors }}</div>
+            {% endif %}
+
+            <label for="{{ form.new_password2.id_for_label }}">Confirm New Password</label>
+            {{ form.new_password2 }}
+            <div class="hint-text">Enter the same password again for confirmation.</div>
+            {% if form.new_password2.errors %}
+                <div class="error-message">{{ form.new_password2.errors }}</div>
+            {% endif %}
+
+            <button type="submit">Change Password</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'farm:user_dashboard' %}">Back to Dashboard</a>
+        </div>
+        <style>
+            .profile-photo-preview {
+                margin: 0 auto 20px;
+                width: 220px;
+                height: 280px;
+                overflow: hidden;
+                border-radius: 12px;
+                border: 2px solid #4CAF50;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f4f4f4;
+            }
+            .profile-photo-preview img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: cover;
+            }
+            .info-view {
+                margin-bottom: 30px;
+            }
+            .info-section {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #ddd;
+            }
+            .info-section label {
+                display: block;
+                font-weight: bold;
+                color: #4CAF50;
+                margin-bottom: 5px;
+            }
+            .info-section p {
+                margin: 0;
+                color: #333;
+                font-size: 1em;
+            }
+            .edit-btn, .cancel-btn {
+                background: #4CAF50;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 0;
+            }
+            .edit-btn:hover {
+                background: #45a049;
+            }
+            .cancel-btn {
+                background: #999;
+            }
+            .cancel-btn:hover {
+                background: #777;
+            }
+            .edit-form form {
+                display: flex;
+                flex-direction: column;
+            }
+            .help-text {
+                font-size: 0.9em;
+                color: #555;
+                margin: 0 0 8px;
+                display: block;
+            }
+            .delete-checkbox {
+                display: block;
+                margin: 10px 0;
+                font-size: 0.9em;
+                color: #333;
+            }
+            input[type="file"] {
+                padding: 10px;
+            }
+        </style>
+        <script>
+            function toggleEditMode() {
+                const infoView = document.getElementById('info-view');
+                const editForm = document.getElementById('edit-form');
+                if (editForm.style.display === 'none') {
+                    editForm.style.display = 'block';
+                    infoView.style.display = 'none';
+                } else {
+                    editForm.style.display = 'none';
+                    infoView.style.display = 'block';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

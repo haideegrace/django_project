@@ -1,0 +1,40 @@
+# Python
+*.py[cod]
+*$py.class
+__pycache__/
+*.so
+
+# Virtual Environment
+venv/
+env/
+.env
+pyvenv.cfg
+Lib/
+Scripts/
+Include/
+
+# Django
+*.sqlite3
+db.sqlite3
+staticfiles/
+media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (frontend)
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+
+# Distribution
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,155 @@
+{% extends 'farm/base.html' %}
+
+{% block title %}Animals - Farm Inventory{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>🐾 Animals</h1>
+        <p>Review animal records and monitoring data.</p>
+    </div>
+</div>
+
+<!-- ANIMALS LIST -->
+<div class="card">
+    <div class="card-header">
+        <h3>Animal Records</h3>
+    </div>
+    <div class="card-body">
+        {% if animals_by_category %}
+            {% for category, category_animals in animals_by_category.items %}
+                <div class="animal-category">
+                    <h4 style="margin-bottom: 16px; color: var(--primary); text-transform: capitalize;">
+                        {{ category|title }}
+                    </h4>
+                    <div class="animal-grid">
+                        {% for data in category_animals %}
+                            <a href="{% url 'farm:animal_detail' data.animal.id %}" class="animal-card-link">
+                                <div class="animal-card">
+                                    <div class="animal-header">
+                                        <h5>{{ data.animal.name }}</h5>
+                                        <span class="animal-count">{{ data.animal.get_category_display }}</span>
+                                    </div>
+                                    <div class="animal-details">
+                                        <p><strong>Total Count:</strong> {{ data.animal.total_count }}</p>
+                                        <p><strong>Recent Mortality:</strong>
+                                            {% if data.recent_mortality > 0 %}
+                                                {{ data.recent_mortality }}
+                                            {% else %}
+                                                No mortality recorded
+                                            {% endif %}
+                                        </p>
+                                        <p><strong>Activity:</strong></p>
+                                        {% if data.activity_summary %}
+                                            <ul class="activity-summary">
+                                                {% for summary in data.activity_summary %}
+                                                    <li>{{ summary }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="no-records">No records found</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if not forloop.last %}
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border);">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.animal-category {
+    margin-bottom: 20px;
+}
+
+.animal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.animal-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s;
+}
+
+.animal-card-link:hover {
+    transform: translateY(-2px);
+}
+
+.animal-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    background: var(--card-bg);
+    transition: box-shadow 0.2s;
+}
+
+.animal-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.animal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.animal-header h5 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.animal-count {
+    background: var(--primary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.animal-details p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.activity-summary {
+    padding-left: 18px;
+    margin: 8px 0;
+}
+
+.activity-summary li {
+    margin-bottom: 4px;
+}
+
+.no-records {
+    margin: 8px 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+</style>
+
+<script>
+// Modal functions
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+{% endblock %}

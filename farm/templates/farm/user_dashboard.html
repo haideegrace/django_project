@@ -1,0 +1,139 @@
+{% extends 'farm/base.html' %}
+
+{% block title %}Dashboard - BATAC Farm Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">
+        <span class="page-title-icon">📊</span>
+        Dashboard
+    </h1>
+    <div class="page-actions">
+    </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="summary-grid">
+    <div class="summary-card">
+        <div class="summary-card-icon">🐔</div>
+        <div class="summary-card-label">Chicken Dashboard Overview</div>
+        <div class="summary-card-value">Flock monitoring</div>
+        <div class="summary-card-detail">
+            {% if animals_by_category %}
+                {% for cat in animals_by_category %}
+                    {{ cat.category|title }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                No animal categories recorded.
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-card-icon">🥚</div>
+        <div class="summary-card-label">Today's Egg Count</div>
+        <div class="summary-card-value">{{ today_eggs }}</div>
+        <div class="summary-card-detail">Weekly total: {{ weekly_eggs }} eggs</div>
+    </div>
+
+    <div class="summary-card {% if feed_status == 'critical' %}status-critical{% elif feed_status == 'warning' %}status-warning{% endif %}">
+        <div class="summary-card-icon">🌾</div>
+        <div class="summary-card-label">Feed Stock</div>
+        <div class="summary-card-value">{{ total_feed_stock|floatformat:1 }} kg</div>
+        <div class="summary-card-detail">
+            {% if feed_status == 'critical' %}
+                <span style="color: var(--danger);">⚠️ Critical - monitor stock</span>
+            {% elif feed_status == 'warning' %}
+                <span style="color: var(--warning);">⚠️ Low stock</span>
+            {% else %}
+                <span style="color: var(--success);">✓ Stock levels stable</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-card-icon">📋</div>
+        <div class="summary-card-label">Recent Mortality</div>
+        <div class="summary-card-value">{{ recent_mortality }}</div>
+        <div class="summary-card-detail">Last 7 days</div>
+    </div>
+</div>
+
+<!-- RECENT ACTIVITY -->
+<div class="table-container">
+    <div class="table-toolbar">
+        <div class="table-toolbar-left">
+            <h3 style="margin: 0;">Recent Activity</h3>
+            <div class="table-search">
+                <input type="text" id="activitySearch" placeholder="Search activities..." onkeyup="filterActivities()">
+            </div>
+        </div>
+        <div class="table-toolbar-right">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterActivitiesByPeriod('today')">Today</button>
+                <button class="filter-btn" onclick="filterActivitiesByPeriod('week')">This Week</button>
+                <button class="filter-btn" onclick="filterActivitiesByPeriod('month')">This Month</button>
+            </div>
+        </div>
+    </div>
+
+    {% if today_activities %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Activity</th>
+                    <th>Animal</th>
+                    <th>Time</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in today_activities|slice:":10" %}
+                    <tr style="cursor: pointer;" onclick="showActivityDetails('{{ activity.id }}')">
+                        <td><strong>{{ activity.employee.name }}</strong></td>
+                        <td>{{ activity.get_activity_type_display }}</td>
+                        <td>{{ activity.animal.name|default:"N/A" }}</td>
+                        <td>{{ activity.time }}</td>
+                        <td>
+                            {% if activity.quantity %}
+                                {{ activity.quantity }} {{ activity.unit }}
+                            {% endif %}
+                            {% if activity.photo %}
+                                📷
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <div class="empty-state-title">No Activity Today</div>
+            <div class="empty-state-text">Activities recorded today will appear here</div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function showActivityDetails(activityId) {
+        showToast('Activity details feature coming soon!', 'info');
+    }
+
+    function filterActivities() {
+        const searchTerm = document.getElementById('activitySearch').value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    }
+
+    function filterActivitiesByPeriod(period) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        showToast(`Showing ${period} activities`, 'info');
+    }
+</script>
+{% endblock %}
