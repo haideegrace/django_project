@@ -45,7 +45,8 @@
             <h2>Animal Categories</h2>
             <ul>
                 {% for cat in animal_categories %}
-                    <li><a href="{% url 'admin:farm_animal_changelist' %}?category={{ cat.category }}">{{ cat.category|title }}: {{ cat.total }}</a></li>
+                <li><a href="{% url 'admin:farm_animal_changelist' %}?category={{ cat.category }}">{{ cat.category|title
+                        }}: {{ cat.total }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -54,26 +55,27 @@
     <div class="feed-stock-section">
         <h2>Feed Stock Status</h2>
         {% if low_feed_alerts %}
-            <ul class="alerts">
-                {% for feed in low_feed_alerts %}
-                    <li>{{ feed.name }}: {{ feed.current_stock }} {{ feed.unit }} (threshold: {{ feed.low_stock_threshold }})</li>
-                {% endfor %}
-            </ul>
+        <ul class="alerts">
+            {% for feed in low_feed_alerts %}
+            <li>{{ feed.name }}: {{ feed.current_stock }} {{ feed.unit }} (threshold: {{ feed.low_stock_threshold }})
+            </li>
+            {% endfor %}
+        </ul>
         {% else %}
-            <p>All feed stocks are above threshold</p>
+        <p>All feed stocks are above threshold</p>
         {% endif %}
     </div>
 
     <div class="alerts-section">
         <h2>Quick Alerts</h2>
         {% if alerts %}
-            <ul class="alerts">
-                {% for alert in alerts %}
-                    <li>{{ alert }}</li>
-                {% endfor %}
-            </ul>
+        <ul class="alerts">
+            {% for alert in alerts %}
+            <li>{{ alert }}</li>
+            {% endfor %}
+        </ul>
         {% else %}
-            <p>No alerts</p>
+        <p>No alerts</p>
         {% endif %}
     </div>
 
@@ -101,177 +103,177 @@
 
 {% block extrastyle %}
 <style>
-body {
-    background: #f5f7fa;
-}
+    body {
+        background: #f5f7fa;
+    }
 
-#content-main {
-    background: transparent;
-    box-shadow: none;
-}
+    #content-main {
+        background: transparent;
+        box-shadow: none;
+    }
 
-.quick-actions {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
+    .quick-actions {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 40px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
 
-.quick-actions h2,
-.feed-stock-section h2,
-.alerts-section h2,
-.chart-container h2,
-.dashboard-card h2 {
-    margin-top: 0;
-    color: #111827;
-    font-size: 1.35rem;
-    font-weight: 700;
-}
+    .quick-actions h2,
+    .feed-stock-section h2,
+    .alerts-section h2,
+    .chart-container h2,
+    .dashboard-card h2 {
+        margin-top: 0;
+        color: #111827;
+        font-size: 1.35rem;
+        font-weight: 700;
+    }
 
-.action-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 18px;
-}
+    .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+    }
 
-.action-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14px 22px;
-    background: #2563eb;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 600;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    min-height: 56px;
-}
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 22px;
+        background: #2563eb;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: 600;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        min-height: 56px;
+    }
 
-.action-button:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-}
+    .action-button:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
 
-.action-button.primary {
-    background: #16a34a;
-}
+    .action-button.primary {
+        background: #16a34a;
+    }
 
-.action-button.primary:hover {
-    background: #15803d;
-}
+    .action-button.primary:hover {
+        background: #15803d;
+    }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-}
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
 
-.dashboard-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 24px;
-    text-align: left;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-}
+    .dashboard-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: left;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
 
-.dashboard-card h2 {
-    margin-bottom: 14px;
-}
+    .dashboard-card h2 {
+        margin-bottom: 14px;
+    }
 
-.metric {
-    font-size: 2.6rem;
-    font-weight: 700;
-    color: #111827;
-    margin: 0;
-}
+    .metric {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0;
+    }
 
-.dashboard-card ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
+    .dashboard-card ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
 
-.dashboard-card li {
-    margin-bottom: 8px;
-}
+    .dashboard-card li {
+        margin-bottom: 8px;
+    }
 
-.dashboard-card a {
-    color: #2563eb;
-    text-decoration: none;
-}
+    .dashboard-card a {
+        color: #2563eb;
+        text-decoration: none;
+    }
 
-.dashboard-card a:hover {
-    text-decoration: underline;
-}
+    .dashboard-card a:hover {
+        text-decoration: underline;
+    }
 
-.feed-stock-section,
-.alerts-section,
-.chart-container {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-    margin-bottom: 30px;
-}
+    .feed-stock-section,
+    .alerts-section,
+    .chart-container {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        margin-bottom: 40px;
+    }
 
-.alerts {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+    .alerts {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-.alerts li {
-    background: #f8fafc;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    color: #111827;
-}
+    .alerts li {
+        background: #f8fafc;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        color: #111827;
+    }
 
-.chart-container {
-    margin-bottom: 30px;
-}
+    .chart-container {
+        margin-bottom: 40px;
+    }
 
-.chart-container h2 {
-    margin-bottom: 12px;
-}
+    .chart-container h2 {
+        margin-bottom: 12px;
+    }
 
-.quick-actions + .quick-actions {
-    margin-top: 30px;
-}
+    .quick-actions+.quick-actions {
+        margin-top: 30px;
+    }
 
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background: #3b82f6;
-    color: white;
-    text-decoration: none;
-    border-radius: 12px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
+    .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        background: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
 
-.button:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
-}
+    .button:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+    }
 
-.button:last-child {
-    margin-right: 0;
-}
+    .button:last-child {
+        margin-right: 0;
+    }
 </style>
 {% endblock %}
 
@@ -281,39 +283,39 @@ body {
 
 {% block extrascript %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Egg Production Chart
-    const eggCtx = document.getElementById('eggChart').getContext('2d');
-    const eggData = JSON.parse('{{ egg_data|escapejs }}');
-    new Chart(eggCtx, {
-        type: 'line',
-        data: {
-            labels: eggData.map(d => d.date),
-            datasets: [{
-                label: 'Eggs Produced',
-                data: eggData.map(d => d.total),
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        }
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Egg Production Chart
+        const eggCtx = document.getElementById('eggChart').getContext('2d');
+        const eggData = JSON.parse('{{ egg_data|escapejs }}');
+        new Chart(eggCtx, {
+            type: 'line',
+            data: {
+                labels: eggData.map(d => d.date),
+                datasets: [{
+                    label: 'Eggs Produced',
+                    data: eggData.map(d => d.total),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            }
+        });
 
-    // Feed Usage Chart
-    const feedCtx = document.getElementById('feedChart').getContext('2d');
-    const feedData = JSON.parse('{{ feed_usage_data|escapejs }}');
-    new Chart(feedCtx, {
-        type: 'bar',
-        data: {
-            labels: feedData.map(d => d.date),
-            datasets: [{
-                label: 'Feed Used (kg)',
-                data: feedData.map(d => d.total),
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        }
+        // Feed Usage Chart
+        const feedCtx = document.getElementById('feedChart').getContext('2d');
+        const feedData = JSON.parse('{{ feed_usage_data|escapejs }}');
+        new Chart(feedCtx, {
+            type: 'bar',
+            data: {
+                labels: feedData.map(d => d.date),
+                datasets: [{
+                    label: 'Feed Used (kg)',
+                    data: feedData.map(d => d.total),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
     });
-});
 </script>
 {% endblock %}

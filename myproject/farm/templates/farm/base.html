@@ -1,11 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BATAC Farm Management{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         /* ===== GLOBAL STYLES ===== */
         * {
@@ -27,9 +29,9 @@
             --text-primary: #212121;
             --text-secondary: #757575;
             --border: #e0e0e0;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
             --transition: 0.3s ease;
         }
 
@@ -42,6 +44,7 @@
             background: var(--bg) !important;
             color: var(--text-primary);
             line-height: 1.6;
+            font-size: 16px;
         }
 
         /* ===== LAYOUT ===== */
@@ -152,6 +155,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -344,7 +348,7 @@
         }
 
         .main-content {
-            padding: 30px;
+            padding: 40px;
             margin-top: 70px;
         }
 
@@ -796,8 +800,13 @@
         }
 
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         .btn.loading {
@@ -862,8 +871,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
@@ -880,6 +894,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1110,6 +1125,7 @@
                 opacity: 0;
                 transform: translateX(100px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -1179,7 +1195,8 @@
                 font-size: 0.85em;
             }
 
-            td, th {
+            td,
+            th {
                 padding: 12px;
             }
 
@@ -1264,18 +1281,45 @@
         }
 
         /* ===== UTILITY CLASSES ===== */
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .text-muted { color: var(--text-secondary); }
-        .mt-4 { margin-top: 24px; }
-        .mb-4 { margin-bottom: 24px; }
-        .flex { display: flex; }
-        .gap-2 { gap: 12px; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+        }
+
+        .mt-4 {
+            margin-top: 24px;
+        }
+
+        .mb-4 {
+            margin-bottom: 24px;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: 12px;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
     <div class="layout">
         <!-- SIDEBAR -->
@@ -1284,47 +1328,54 @@
                 <span>🌾</span>
                 <span>BATAC Farm</span>
             </div>
-            
+
             <nav>
                 <ul class="sidebar-nav">
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:user_dashboard' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">
+                        <a href="{% url 'farm:user_dashboard' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">
                             <span class="sidebar-nav-icon">📊</span>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:animals' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'animals' %}active{% endif %}">
+                        <a href="{% url 'farm:animals' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'animals' %}active{% endif %}">
                             <span class="sidebar-nav-icon">🐔</span>
                             <span>Animals & Eggs</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:egg_production' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'egg_production' %}active{% endif %}">
+                        <a href="{% url 'farm:egg_production' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'egg_production' %}active{% endif %}">
                             <span class="sidebar-nav-icon">📋</span>
                             <span>Egg Production</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:feed_inventory' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'feed_inventory' %}active{% endif %}">
+                        <a href="{% url 'farm:feed_inventory' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'feed_inventory' %}active{% endif %}">
                             <span class="sidebar-nav-icon">🌾</span>
                             <span>Feed Stock</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:mortality_records' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'mortality_records' %}active{% endif %}">
+                        <a href="{% url 'farm:mortality_records' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'mortality_records' %}active{% endif %}">
                             <span class="sidebar-nav-icon">⚠️</span>
                             <span>Mortality Summary</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:user_reports' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_reports' %}active{% endif %}">
+                        <a href="{% url 'farm:user_reports' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_reports' %}active{% endif %}">
                             <span class="sidebar-nav-icon">📈</span>
                             <span>Report with Proof Activities</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="{% url 'farm:user_profile' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_profile' %}active{% endif %}">
+                        <a href="{% url 'farm:user_profile' %}"
+                            class="sidebar-nav-link {% if request.resolver_match.url_name == 'user_profile' %}active{% endif %}">
                             <span class="sidebar-nav-icon">⚙️</span>
                             <span>Settings and Profile</span>
                         </a>
@@ -1350,7 +1401,7 @@
                         <button class="notification-bell" onclick="toggleNotifications()">
                             🔔
                             {% if unread_notifications > 0 %}
-                                <span class="notification-badge">{{ unread_notifications }}</span>
+                            <span class="notification-badge">{{ unread_notifications }}</span>
                             {% endif %}
                         </button>
 
@@ -1358,29 +1409,31 @@
                             <div class="notification-header">
                                 <h3>Notifications</h3>
                                 <div style="display: flex; gap: 12px;">
-                                    <a href="#" class="notification-mark-read" onclick="markAllAsRead(event)">Mark all as read</a>
-                                    <a href="#" class="notification-mark-read" onclick="clearAllNotifications(event)" style="color: #d32f2f;">Clear all</a>
+                                    <a href="#" class="notification-mark-read" onclick="markAllAsRead(event)">Mark all
+                                        as read</a>
+                                    <a href="#" class="notification-mark-read" onclick="clearAllNotifications(event)"
+                                        style="color: #d32f2f;">Clear all</a>
                                 </div>
                             </div>
-                            
+
                             {% if notifications %}
-                                <div class="notification-section">
-                                    <div class="notification-section-title">Recent</div>
-                                    {% for notif in notifications %}
-                                        <div class="notification-item">
-                                            <div class="notification-item-icon">{{ notif.icon }}</div>
-                                            <div class="notification-item-content">
-                                                <div class="notification-item-message">{{ notif.message }}</div>
-                                                <div class="notification-item-time">{{ notif.date }}</div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
+                            <div class="notification-section">
+                                <div class="notification-section-title">Recent</div>
+                                {% for notif in notifications %}
+                                <div class="notification-item">
+                                    <div class="notification-item-icon">{{ notif.icon }}</div>
+                                    <div class="notification-item-content">
+                                        <div class="notification-item-message">{{ notif.message }}</div>
+                                        <div class="notification-item-time">{{ notif.date }}</div>
+                                    </div>
                                 </div>
+                                {% endfor %}
+                            </div>
                             {% else %}
-                                <div class="empty-state" style="padding: 30px 20px;">
-                                    <div style="font-size: 2em; margin-bottom: 8px;">✅</div>
-                                    <p style="color: var(--text-secondary); margin: 0;">All caught up!</p>
-                                </div>
+                            <div class="empty-state" style="padding: 30px 20px;">
+                                <div style="font-size: 2em; margin-bottom: 8px;">✅</div>
+                                <p style="color: var(--text-secondary); margin: 0;">All caught up!</p>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -1410,39 +1463,58 @@
 
     <!-- DJANGO MESSAGES -->
     {% if messages %}
-        <div id="djangoMessages">
-            {% for message in messages %}
-                <div class="django-message {{ message.tags }}">
-                    <div class="django-message-icon">
-                        {% if message.tags == 'success' %}✓
-                        {% elif message.tags == 'error' %}✕
-                        {% elif message.tags == 'warning' %}⚠️
-                        {% else %}ℹ️{% endif %}
-                    </div>
-                    <span>{{ message }}</span>
-                    <button class="django-message-close" onclick="this.parentElement.remove()">✕</button>
-                </div>
-            {% endfor %}
+    <div id="djangoMessages">
+        {% for message in messages %}
+        <div class="django-message {{ message.tags }}">
+            <div class="django-message-icon">
+                {% if message.tags == 'success' %}✓
+                {% elif message.tags == 'error' %}✕
+                {% elif message.tags == 'warning' %}⚠️
+                {% else %}ℹ️{% endif %}
+            </div>
+            <span>{{ message }}</span>
+            <button class="django-message-close" onclick="this.parentElement.remove()">✕</button>
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
     <!-- TOAST NOTIFICATIONS -->
     <div id="toastContainer"></div>
 
     <!-- CSRF TOKEN -->
-    {% csrf_token %}
+    <div id="csrf-token-container" style="display:none">{% csrf_token %}</div>
 
     <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getCsrfToken() {
+            return getCookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+        }
+
         // ===== NOTIFICATION TOGGLE =====
         function toggleNotifications() {
             const dropdown = document.getElementById('notificationDropdown');
             dropdown.classList.toggle('active');
         }
 
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const bell = document.querySelector('.notification-bell');
             const dropdown = document.getElementById('notificationDropdown');
-            
+
             if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('active');
             }
@@ -1453,25 +1525,25 @@
             fetch('{% url "farm:mark_all_notifications_read" %}', {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-CSRFToken': getCsrfToken(),
                     'Content-Type': 'application/json',
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast('All notifications marked as read', 'success');
-                    document.getElementById('notificationDropdown').classList.remove('active');
-                    // Update badge count
-                    const badge = document.querySelector('.notification-badge');
-                    if (badge) badge.remove();
-                    // Reload page to update notifications
-                    setTimeout(() => location.reload(), 1000);
-                }
-            })
-            .catch(error => {
-                showToast('Error updating notifications', 'error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('All notifications marked as read', 'success');
+                        document.getElementById('notificationDropdown').classList.remove('active');
+                        // Update badge count
+                        const badge = document.querySelector('.notification-badge');
+                        if (badge) badge.remove();
+                        // Reload page to update notifications
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                })
+                .catch(error => {
+                    showToast('Error updating notifications', 'error');
+                });
         }
 
         function clearAllNotifications(e) {
@@ -1480,22 +1552,22 @@
                 fetch('{% url "farm:clear_notifications" %}', {
                     method: 'POST',
                     headers: {
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        'X-CSRFToken': getCsrfToken(),
                         'Content-Type': 'application/json',
                     },
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('All notifications cleared', 'success');
-                        document.getElementById('notificationDropdown').classList.remove('active');
-                        // Reload page to update notifications
-                        setTimeout(() => location.reload(), 1000);
-                    }
-                })
-                .catch(error => {
-                    showToast('Error clearing notifications', 'error');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('All notifications cleared', 'success');
+                            document.getElementById('notificationDropdown').classList.remove('active');
+                            // Reload page to update notifications
+                            setTimeout(() => location.reload(), 1000);
+                        }
+                    })
+                    .catch(error => {
+                        showToast('Error clearing notifications', 'error');
+                    });
             }
         }
 
@@ -1504,20 +1576,20 @@
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
+
             const icons = {
                 success: '✓',
                 error: '✕',
                 info: 'ⓘ'
             };
-            
+
             toast.innerHTML = `
                 <div class="toast-icon">${icons[type]}</div>
                 <span>${message}</span>
             `;
-            
+
             container.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.animation = 'slideInRight 0.3s ease-out reverse';
                 setTimeout(() => toast.remove(), 300);
@@ -1534,7 +1606,7 @@
         }
 
         document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === this) {
                     this.classList.remove('active');
                 }
@@ -1542,14 +1614,14 @@
         });
 
         document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 this.closest('.modal').classList.remove('active');
             });
         });
 
         // ===== FILTER BUTTONS =====
         document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
             });
@@ -1557,4 +1629,5 @@
     </script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

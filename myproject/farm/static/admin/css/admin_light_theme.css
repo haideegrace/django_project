@@ -1,15 +1,30 @@
 /* Global admin light theme overrides */
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html,
+body {
     background: #f8fafc !important;
     color: #111827 !important;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    font-family: 'Poppins', sans-serif !important;
+    line-height: 1.6 !important;
 }
 
 body {
     min-height: 100%;
 }
 
-#header, #header h1, #user-tools, .breadcrumbs, #nav-sidebar, #content, .module, .dashboard, .grp-module, .inline-group, .fieldset, fieldset.module {
+#header,
+#header h1,
+#user-tools,
+.breadcrumbs,
+#nav-sidebar,
+#content,
+.module,
+.dashboard,
+.grp-module,
+.inline-group,
+.fieldset,
+fieldset.module {
     background: #ffffff !important;
     color: #111827 !important;
     border-color: #e5e7eb !important;
@@ -26,7 +41,9 @@ body {
     color: #111827 !important;
 }
 
-#user-tools a, #user-tools a:link, #user-tools a:visited {
+#user-tools a,
+#user-tools a:link,
+#user-tools a:visited {
     color: #374151 !important;
 }
 
@@ -34,11 +51,14 @@ body {
     border-right: 1px solid #e5e7eb !important;
 }
 
-#nav-sidebar a, #nav-sidebar .selected a, #nav-sidebar a:hover {
+#nav-sidebar a,
+#nav-sidebar .selected a,
+#nav-sidebar a:hover {
     color: #1f2937 !important;
 }
 
-#content, #content-main {
+#content,
+#content-main {
     background: transparent !important;
     box-shadow: none !important;
 }
@@ -52,54 +72,87 @@ fieldset.module h2 {
     color: #111827 !important;
 }
 
-.module caption, .module .collapse, .module label, .module th, .module td {
+.module caption,
+.module .collapse,
+.module label,
+.module th,
+.module td {
     color: #374151 !important;
 }
 
-.fieldset, .grp-module, .module, .dashboard {
-    padding: 1.5rem !important;
+.fieldset,
+.grp-module,
+.module,
+.dashboard {
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+    border-radius: 12px !important;
+}
+
+.module table,
+.changeform-main,
+.inline-related,
+.form-row {
+    background: #ffffff !important;
     margin-bottom: 1.5rem !important;
 }
 
-.module table, .changeform-main, .inline-related, .form-row {
-    background: #ffffff !important;
-}
-
-.form-row th, .form-row td, .grp-table th, .grp-table td {
+.form-row th,
+.form-row td,
+.grp-table th,
+.grp-table td {
     border-color: #e5e7eb !important;
     color: #111827 !important;
+    padding: 1rem !important;
 }
 
-.form-row th, .form-row td {
+.form-row th,
+.form-row td {
     background: #ffffff !important;
 }
 
-.deletelink, .cancel, .inline-deletelink {
+.deletelink,
+.cancel,
+.inline-deletelink {
     color: #dc2626 !important;
 }
 
-a, a:link, a:visited, a:hover, a:active {
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
     color: #1d4ed8 !important;
 }
 
-button, .button, input[type="submit"], .deletelink {
+button,
+.button,
+input[type="submit"],
+.deletelink {
     border-radius: 12px !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-input[type="submit"], .button, .submit-row input[type="submit"], .button.default {
+input[type="submit"],
+.button,
+.submit-row input[type="submit"],
+.button.default {
     background: #2563eb !important;
     color: #ffffff !important;
     border: 1px solid transparent !important;
     padding: 0.85rem 1.15rem !important;
 }
 
-input[type="submit"]:hover, .button:hover, .submit-row input[type="submit"]:hover {
+input[type="submit"]:hover,
+.button:hover,
+.submit-row input[type="submit"]:hover {
     background: #1d4ed8 !important;
 }
 
-input[name="_save"], input[name="_continue"], input[name="_addanother"] {
+input[name="_save"],
+input[name="_continue"],
+input[name="_addanother"] {
     background: #2563eb !important;
 }
 
@@ -107,7 +160,11 @@ input[name="_delete"] {
     background: #dc2626 !important;
 }
 
-button, .button, input[type="submit"], input[type="button"], input[type="reset"] {
+button,
+.button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
     font-weight: 600 !important;
 }
 
@@ -125,45 +182,68 @@ button, .button, input[type="submit"], input[type="button"], input[type="reset"]
     color: #6b7280 !important;
 }
 
-.inline-group, .module, .grp-module, .fieldset, fieldset.module {
+.inline-group,
+.module,
+.grp-module,
+.fieldset,
+fieldset.module {
     border-radius: 16px !important;
 }
 
-table.adminlist, table.change-list,
+table.adminlist,
+table.change-list,
 table.result_list {
     background: #ffffff !important;
     border: 1px solid #e5e7eb !important;
 }
 
-table.adminlist th, table.change-list th, table.result_list th,
-table.adminlist td, table.change-list td, table.result_list td {
+table.adminlist th,
+table.change-list th,
+table.result_list th,
+table.adminlist td,
+table.change-list td,
+table.result_list td {
     border-color: #e5e7eb !important;
     color: #111827 !important;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     background: #ffffff !important;
     color: #111827 !important;
     border: 1px solid #d1d5db !important;
     box-shadow: none !important;
 }
 
-select, input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="password"], textarea {
+select,
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="password"],
+textarea {
     border-radius: 12px !important;
     padding: 0.75rem !important;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
     outline: none !important;
     border-color: #2563eb !important;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
 }
 
-button, input[type="submit"], .button {
+button,
+input[type="submit"],
+.button {
     cursor: pointer !important;
 }
 
-.stack, .stacked, .submit-row {
+.stack,
+.stacked,
+.submit-row {
     background: #ffffff !important;
 }
 
@@ -171,19 +251,30 @@ button, input[type="submit"], .button {
     background: #f8fafc !important;
 }
 
-#content-main .module, #content-main .dashboard {
+#content-main .module,
+#content-main .dashboard {
     background: #ffffff !important;
 }
 
-#content-main .module:not(:last-child), #content-main .dashboard:not(:last-child) {
+#content-main .module:not(:last-child),
+#content-main .dashboard:not(:last-child) {
     margin-bottom: 1.5rem !important;
 }
 
-#header, #nav-sidebar, #content, .module, .dashboard {
+#header,
+#nav-sidebar,
+#content,
+.module,
+.dashboard {
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
 }
 
-#content-main h1, .module caption, .module h2, .dashboard h2, .fieldset h2 {
+#content-main h1,
+.module caption,
+.module h2,
+.dashboard h2,
+.fieldset h2 {
     letter-spacing: -0.02em;
 }
+
 </style>
