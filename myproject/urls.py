@@ -18,9 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
 from farm.admin import farm_admin
 
+
+# Health check endpoint to keep Render free tier alive
+def health_check(request):
+    return JsonResponse({'status': 'ok'})
+
+
 urlpatterns = [
+    path('health/', health_check, name='health_check'),
     path('admin/', farm_admin.urls),
     path('api/', include('farm.api_urls')),
     path('', include('farm.urls')),
