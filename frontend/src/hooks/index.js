@@ -19,7 +19,9 @@ export const useFetch = (url, options = {}) => {
       setLoading(true);
       setError(null);
       const response = await apiClient.get(url, options);
-      setData(response.data);
+      // Auto-unwrap paginated responses
+      const result = response.data?.results !== undefined ? response.data.results : response.data;
+      setData(result);
     } catch (err) {
       setError(handleAPIError(err));
     } finally {
