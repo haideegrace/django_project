@@ -7,15 +7,23 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 # Auto-create superuser with password (free tier has no shell access)
-python manage.py shell -c "
-import os
+python -c "
+import os, django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+django.setup()
 from django.contrib.auth.models import User
-username = os.environ.get('DJANGO_SUPERUSER_USERNAME')
-password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
-email = os.environ.get('DJANGO_SUPERUSER_EMAIL', '')
-if username and password:
-    user, created = User.objects.get_or_create(username=username, defaults={'email': email, 'is_superuser': True, 'is_staff': True})
-    user.set_password(password)
-    user.save()
-    print(f'Superuser {username} {\"created\" if created else \"updated\"}')
+u = os.environ.get('DJANGO_SUPERUSER_USERNAME', '')
+p = os.environ.get('DJANGO_SUPERUSER_PASSWORD', '')
+e = os.environ.get('DJANGO_SUPERUSER_EMAIL', '')
+print(f'Creating user: [{u}] with password length: {len(p)}')
+if u and p:
+    if User.objects.filter(username=u).exists():
+        user = User.objects.get(username=u)
+        user.set_password(p)
+        user.save()
+        print(f'Password reset for {u}')
+    else:
+        user = User.objects.create_superuser(u, e, p)
+        print(f'Superuser {u} created')
 "
+
