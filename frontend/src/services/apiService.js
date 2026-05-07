@@ -7,13 +7,63 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
+/**
+ * AUTH HELPERS - Token-based auth for cross-domain (Vercel <-> Render)
+ */
+export const getAuth = () => {
+  const token = localStorage.getItem('auth_token');
+  const user = localStorage.getItem('auth_user');
+  return { token, user: user ? JSON.parse(user) : null };
+};
+
+export const saveAuth = (token, user) => {
+  localStorage.setItem('auth_token', token);
+  localStorage.setItem('auth_user', JSON.stringify(user));
+};
+
+export const clearAuth = () => {
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('auth_user');
+};
+
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Enable session-based authentication
 });
+
+// Attach token to every request
+apiClient.interceptors.request.use((config) => {
+  const { token } = getAuth();
+  if (token) {
+    config.headers.Authorization = `Token ${token}`;
+  }
+  return config;
+});
+
+// Handle 401 responses (token expired/invalid)
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      clearAuth();
+      window.location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
+
+/**
+ * AUTH ENDPOINTS
+ */
+export const authAPI = {
+  login: (username, password) => apiClient.post('/auth/login/', { username, password }),
+  logout: () => {
+    clearAuth();
+    return Promise.resolve();
+  },
+};
 
 /**
  * ANIMALS ENDPOINTS

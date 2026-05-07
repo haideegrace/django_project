@@ -8,6 +8,8 @@ import './App.css';
 import { Dashboard } from './components/Dashboard';
 import { Animals } from './components/Animals';
 import { EggProduction } from './components/EggProduction';
+import { Login } from './components/Login';
+import { getAuth, clearAuth } from './services/apiService';
 import webSocketService from './services/webSocketService';
 
 function App() {
@@ -16,9 +18,27 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    // You can fetch current user here if needed
-    // For now, just initialize
+    // Check if user is already logged in
+    const { token, user: savedUser } = getAuth();
+    if (token && savedUser) {
+      setUser(savedUser);
+    }
   }, []);
+
+  const handleLoginSuccess = (loggedInUser) => {
+    setUser(loggedInUser);
+  };
+
+  const handleLogout = () => {
+    clearAuth();
+    setUser(null);
+    setCurrentPage('dashboard');
+  };
+
+  // If not logged in, show login page
+  if (!user) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -47,7 +67,7 @@ function App() {
           <h1 className="app-title">🌾 Farm Management System</h1>
           <div className="user-section">
             {user && <span className="user-name">{user.username}</span>}
-            <a href="/logout" className="logout-link">Logout</a>
+            <button onClick={handleLogout} className="logout-link">Logout</button>
           </div>
         </div>
       </header>
@@ -109,3 +129,4 @@ function App() {
 }
 
 export default App;
+
