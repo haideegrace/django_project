@@ -30,6 +30,10 @@ env/
 .venv/
 env.bak/
 venv.bak/
+Scripts/
+Lib/
+Include/
+pyvenv.cfg
 
 # Django
 *.log
