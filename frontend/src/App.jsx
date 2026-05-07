@@ -1,77 +1,24 @@
 /**
  * Main App Component
  * Root component for the React frontend
- * Handles authentication state and page routing
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Dashboard } from './components/Dashboard';
 import { Animals } from './components/Animals';
 import { EggProduction } from './components/EggProduction';
-import { Login } from './components/Login';
-import { authAPI, clearAuth, getStoredUser, isAuthenticated } from './services/apiService';
+import webSocketService from './services/webSocketService';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const [user, setUser] = useState(getStoredUser());
+  const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
-  const [loggingOut, setLoggingOut] = useState(false);
 
-  // Listen for auth-expired events (e.g., 401 from API interceptor)
   useEffect(() => {
-    const handleAuthExpired = () => {
-      setIsLoggedIn(false);
-      setUser(null);
-    };
-
-    window.addEventListener('auth-expired', handleAuthExpired);
-    return () => window.removeEventListener('auth-expired', handleAuthExpired);
+    // You can fetch current user here if needed
+    // For now, just initialize
   }, []);
-
-  // Verify token is still valid on mount
-  useEffect(() => {
-    if (isLoggedIn) {
-      authAPI.getCurrentUser()
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch(() => {
-          // Token is invalid
-          clearAuth();
-          setIsLoggedIn(false);
-          setUser(null);
-        });
-    }
-  }, [isLoggedIn]);
-
-  const handleLoginSuccess = useCallback((userData) => {
-    setUser(userData);
-    setIsLoggedIn(true);
-    setCurrentPage('dashboard');
-  }, []);
-
-  const handleLogout = useCallback(async () => {
-    setLoggingOut(true);
-    try {
-      await authAPI.logout();
-    } catch (err) {
-      // Even if API call fails, clear local auth
-      console.warn('Logout API call failed:', err);
-    } finally {
-      clearAuth();
-      setUser(null);
-      setIsLoggedIn(false);
-      setCurrentPage('dashboard');
-      setLoggingOut(false);
-    }
-  }, []);
-
-  // Show login page if not authenticated
-  if (!isLoggedIn) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -99,14 +46,8 @@ function App() {
           </button>
           <h1 className="app-title">🌾 Farm Management System</h1>
           <div className="user-section">
-            {user && <span className="user-name">👤 {user.username}</span>}
-            <button
-              className="logout-btn"
-              onClick={handleLogout}
-              disabled={loggingOut}
-            >
-              {loggingOut ? 'Logging out...' : 'Logout'}
-            </button>
+            {user && <span className="user-name">{user.username}</span>}
+            <a href="/logout" className="logout-link">Logout</a>
           </div>
         </div>
       </header>

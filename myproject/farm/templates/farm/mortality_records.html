@@ -1,0 +1,106 @@
+{% extends 'farm/base.html' %}
+
+{% block title %}Mortality Records - Farm Inventory{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>⚠️ Mortality Summary</h1>
+        <p>Recent Mortality Data.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'farm:export_mortality_pdf' %}" class="btn btn-primary">
+            📄 Export to PDF
+        </a>
+    </div>
+</div>
+
+<!-- MORTALITY SUMMARY -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_mortality }}</div>
+            <div class="stat-label">Total Deaths ({{ start_date|date:"M d" }} - {{ end_date|date:"M d" }})</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-content">
+            <div class="stat-value">{{ mortality_records|length }}</div>
+            <div class="stat-label">Records</div>
+        </div>
+    </div>
+</div>
+
+<!-- MORTALITY RECORDS -->
+<div class="card">
+    <div class="card-header">
+        <h3>Mortality Records</h3>
+        <div class="card-actions">
+            <form method="get" class="filter-form">
+                <input type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}" class="form-input">
+                <input type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}" class="form-input">
+                <button type="submit" class="btn btn-sm btn-outline">Filter</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if mortality_records %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Animal</th>
+                        <th>Count</th>
+                        <th>Reason</th>
+                        <th>Reported By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in mortality_records %}
+                        <tr>
+                            <td>{{ record.date|date:"M d, Y" }}</td>
+                            <td>{{ record.animal.name }} ({{ record.animal.category }})</td>
+                            <td>{{ record.count }}</td>
+                            <td>{{ record.reason|truncatechars:50|default:"Not specified" }}</td>
+                            <td>{{ record.reported_by.get_full_name|default:record.reported_by.username|default:"System" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">✅</div>
+                <div class="empty-state-title">No Mortality Records</div>
+                <div class="empty-state-text">No animal deaths recorded in the selected period</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- TOP MORTALITY ANIMALS -->
+{% if mortality_by_animal %}
+<div class="card">
+    <div class="card-header">
+        <h3>Animals with Highest Mortality</h3>
+    </div>
+    <div class="card-body">
+        <div class="animal-grid">
+            {% for animal in mortality_by_animal %}
+                <div class="animal-card">
+                    <div class="animal-header">
+                        <h5>{{ animal.animal__name }}</h5>
+                        <span class="animal-count">{{ animal.total_count }}</span>
+                    </div>
+                    <div class="animal-details">
+                        <p><strong>Category:</strong> {{ animal.animal__category|title }}</p>
+                        <p><strong>Total Deaths:</strong> {{ animal.total_count }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

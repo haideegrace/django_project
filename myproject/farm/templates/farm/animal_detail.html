@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Record - {{ animal.name }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background-image: url('https://source.unsplash.com/featured/?farm,animals,pigs'), linear-gradient(135deg, #4CAF50, #45a049);
+            background-size: cover, cover;
+            background-position: center, center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+            color: black;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .export-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .export-btn:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        .animal-overview {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 30px;
+        }
+        .animal-overview p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Animal: {{ animal.name }}</h1>
+        <a href="{% url 'farm:export_animal_pdf' animal.id %}" class="export-btn">📄 Export to PDF</a>
+        
+        <!-- Animal Overview -->
+        <div class="animal-overview">
+            <p><strong>Animal Type:</strong> {{ animal.get_category_display }}</p>
+            <p><strong>Total Count:</strong> {{ animal.total_count }}</p>
+        </div>
+        
+        <!-- Recent Mortality -->
+        <h2>Recent Mortality</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Count</th>
+                    <th>Reason</th>
+                    <th>Reported By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mortality in mortalities %}
+                    <tr>
+                        <td>{{ mortality.date }}</td>
+                        <td>{{ mortality.count }}</td>
+                        <td>{{ mortality.reason }}</td>
+                        <td>{{ mortality.reported_by.get_full_name|default:mortality.reported_by.username }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No mortality records found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Activity History -->
+        <h2>Activity History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Activity Type</th>
+                    <th>Details</th>
+                    <th>Recorded By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.date }}</td>
+                        <td>{{ activity.time }}</td>
+                        <td>{{ activity.get_activity_type_display }}</td>
+                        <td>
+                            {% if activity.quantity %}
+                                {{ activity.quantity }} {{ activity.unit }}
+                            {% endif %}
+                            {% if activity.notes %}
+                                <br><small>{{ activity.notes }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ activity.employee.name|default:activity.employee.user.username }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No activity records found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="back-link">
+            <a href="{% url 'farm:animals' %}">Back to Animals</a>
+        </div>
+    </div>
+</body>
+</html>

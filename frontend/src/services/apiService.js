@@ -1,7 +1,6 @@
 /**
  * API Service for communicating with Django REST Backend
  * Handles all HTTP requests and responses
- * Uses Token-based authentication for cross-domain support (Vercel → Render)
  */
 
 import axios from 'axios';
@@ -13,92 +12,12 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Enable session-based authentication
 });
 
-// ===== TOKEN MANAGEMENT =====
-
 /**
- * Attach auth token to every request automatically
+ * ANIMALS ENDPOINTS
  */
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-/**
- * Handle 401 responses globally — redirect to login
- */
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Token is invalid or expired — clear it
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      // Trigger a custom event so App.jsx can react
-      window.dispatchEvent(new Event('auth-expired'));
-    }
-    return Promise.reject(error);
-  }
-);
-
-// ===== AUTH ENDPOINTS =====
-
-export const authAPI = {
-  login: (username, password) =>
-    apiClient.post('/auth/login/', { username, password }),
-
-  logout: () =>
-    apiClient.post('/auth/logout/'),
-
-  getCurrentUser: () =>
-    apiClient.get('/auth/user/'),
-};
-
-/**
- * Helper: Save auth data to localStorage
- */
-export const saveAuth = (token, user) => {
-  localStorage.setItem('authToken', token);
-  localStorage.setItem('user', JSON.stringify(user));
-};
-
-/**
- * Helper: Clear auth data from localStorage
- */
-export const clearAuth = () => {
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('user');
-};
-
-/**
- * Helper: Get stored user
- */
-export const getStoredUser = () => {
-  try {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-  } catch {
-    return null;
-  }
-};
-
-/**
- * Helper: Check if user is authenticated
- */
-export const isAuthenticated = () => {
-  return !!localStorage.getItem('authToken');
-};
-
-
-// ===== ANIMALS ENDPOINTS =====
-
 export const animalAPI = {
   getAll: () => apiClient.get('/animals/'),
   getById: (id) => apiClient.get(`/animals/${id}/`),
@@ -228,7 +147,7 @@ export const handleAPIError = (error) => {
     // Server responded with error status
     return {
       status: error.response.status,
-      message: error.response.data.detail || error.response.data.error || 'An error occurred',
+      message: error.response.data.detail || 'An error occurred',
       data: error.response.data,
     };
   } else if (error.request) {

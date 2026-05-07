@@ -82,24 +82,22 @@ export const useDashboardRealtime = () => {
 
         // Listen for egg production recorded
         webSocketService.on('egg_production_recorded', (message) => {
-          setDashboardData(prev => {
-            if (!prev) return prev;
-            return {
+          if (dashboardData) {
+            setDashboardData(prev => ({
               ...prev,
               total_eggs_today: prev.total_eggs_today + (message.data.quantity || 0)
-            };
-          });
+            }));
+          }
         });
 
         // Listen for mortality recorded
         webSocketService.on('mortality_recorded', (message) => {
-          setDashboardData(prev => {
-            if (!prev) return prev;
-            return {
+          if (dashboardData) {
+            setDashboardData(prev => ({
               ...prev,
               recent_mortality: prev.recent_mortality + (message.data.count || 0)
-            };
-          });
+            }));
+          }
         });
 
         // Listen for feed alerts

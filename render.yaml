@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: farm-inventory-api
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: python -m gunicorn --chdir myproject myproject.asgi:application -k uvicorn.workers.UvicornWorker --timeout 120 --workers 2
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: WEB_CONCURRENCY
+        value: 2
+      - key: SECURE_SSL_REDIRECT
+        value: True
+      - key: SECURE_HSTS_SECONDS
+        value: 31536000
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://*.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: farm-inventory-db
+          property: connectionString
+
+databases:
+  - name: farm-inventory-db
+    plan: free

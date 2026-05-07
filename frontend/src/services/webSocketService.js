@@ -3,7 +3,26 @@
  * Handles WebSocket connections and message handling
  */
 
-const WS_BASE_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:8000/ws';
+// Build WebSocket URL based on environment
+function getWebSocketBaseURL() {
+  const envUrl = process.env.REACT_APP_WS_URL;
+
+  // If env var is set and doesn't contain ${window...}, use it
+  if (envUrl && !envUrl.includes('${')) {
+    return envUrl;
+  }
+
+  // Otherwise, construct from current window location
+  if (typeof window !== 'undefined') {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    return `${protocol}//${window.location.host}/ws`;
+  }
+
+  // Fallback for development
+  return 'ws://localhost:8000/ws';
+}
+
+const WS_BASE_URL = getWebSocketBaseURL();
 
 class WebSocketService {
   constructor() {
@@ -23,7 +42,7 @@ class WebSocketService {
       try {
         const url = `${WS_BASE_URL}${endpoint}`;
         console.log('Connecting to WebSocket:', url);
-        
+
         this.ws = new WebSocket(url);
 
         this.ws.onopen = () => {
@@ -37,12 +56,12 @@ class WebSocketService {
           try {
             const data = JSON.parse(event.data);
             console.log('WebSocket message received:', data);
-            
+
             // Emit event based on message type
             if (data.type) {
               this.emit(data.type, data);
             }
-            
+
             // Also emit a generic 'message' event
             this.emit('message', data);
           } catch (error) {
@@ -59,7 +78,7 @@ class WebSocketService {
         this.ws.onclose = () => {
           console.log('WebSocket disconnected');
           this.emit('disconnected');
-          
+
           // Attempt to reconnect
           if (!this.isManualClose && this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;
@@ -92,7 +111,7 @@ class WebSocketService {
       this.listeners[event] = [];
     }
     this.listeners[event].push(callback);
-    
+
     // Return unsubscribe function
     return () => this.off(event, callback);
   }
@@ -102,7 +121,7 @@ class WebSocketService {
    */
   off(event, callback) {
     if (!this.listeners[event]) return;
-    
+
     this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
   }
 
@@ -111,7 +130,7 @@ class WebSocketService {
    */
   emit(event, data) {
     if (!this.listeners[event]) return;
-    
+
     this.listeners[event].forEach(callback => {
       try {
         callback(data);

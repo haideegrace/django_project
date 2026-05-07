@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATAC FARM - Employee Profiles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background-image: url('https://source.unsplash.com/featured/?farm,employees,team'), linear-gradient(135deg, #4CAF50, #45a049);
+            background-size: cover, cover;
+            background-position: center, center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: black;
+        }
+        h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .nav-links {
+            margin-top: 10px;
+        }
+        .nav-links a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .employee-profile {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            color: black;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+        .employee-photo {
+            text-align: center;
+        }
+        .employee-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #4CAF50;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .employee-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .info-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .info-section h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+            font-size: 1.1em;
+        }
+        .info-section p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .stat-item {
+            background: #e8f5e8;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4CAF50;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .recent-activities {
+            grid-column: 1 / -1;
+            margin-top: 15px;
+        }
+        .activity-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .activity-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .activity-photo {
+            flex-shrink: 0;
+        }
+        .activity-photo img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        .activity-details {
+            flex-grow: 1;
+        }
+        .activity-details strong {
+            color: #4CAF50;
+            display: block;
+            font-size: 0.9em;
+        }
+        .activity-details small {
+            color: #666;
+            font-size: 0.8em;
+        }
+        .no-employees {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            color: #666;
+            font-style: italic;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .back-link a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>BATAC FARM EMPLOYEE PROFILES</h1>
+        <div class="nav-links">
+            <a href="{% url 'farm:user_dashboard' %}">Dashboard</a>
+            <a href="{% url 'farm:user_reports' %}">Activity Proof Reports</a>
+            <a href="{% url 'farm:employee_list' %}">Employees</a>
+            <a href="{% url 'farm:user_profile' %}">Profile</a>
+            <a href="{% url 'farm:user_logout' %}">Logout</a>
+        </div>
+    </div>
+
+    {% for data in employee_data %}
+        <div class="employee-profile">
+            <div class="employee-photo">
+                {% if data.employee.photo %}
+                    <img src="{{ data.employee.photo.url }}" alt="Employee Photo">
+                {% else %}
+                    <div style="width: 150px; height: 150px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; color: #666; font-size: 3em;">
+                        👤
+                    </div>
+                {% endif %}
+                <h3 style="margin: 10px 0 0 0; color: #4CAF50;">{{ data.employee.user.get_full_name|default:data.employee.user.username }}</h3>
+            </div>
+
+            <div class="employee-info">
+                <div class="info-section">
+                    <h3>📋 Basic Information</h3>
+                    <p><strong>Name:</strong> {{ data.employee.name }}</p>
+                    <p><strong>Email:</strong> {{ data.employee.user.email }}</p>
+                    {% if data.employee.phone_number %}
+                        <p><strong>Phone:</strong> {{ data.employee.phone_number }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="info-section">
+                    <h3>📊 Performance Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ data.total_activities }}</span>
+                            <span class="stat-label">Total Activities</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ data.activities_this_month }}</span>
+                            <span class="stat-label">This Month</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ data.photos_count }}</span>
+                            <span class="stat-label">Photos Taken</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section recent-activities">
+                    <h3>🔥 Recent Activities (Last 7 Days)</h3>
+                    {% if data.recent_activities %}
+                        <div class="activity-list">
+                            {% for activity in data.recent_activities %}
+                                <div class="activity-item">
+                                    {% if activity.photo %}
+                                        <div class="activity-photo">
+                                            <img src="{{ activity.photo.url }}" alt="Activity Photo">
+                                        </div>
+                                    {% endif %}
+                                    <div class="activity-details">
+                                        <strong>{{ activity.get_activity_type_display }}</strong>
+                                        <small>{{ activity.date|date:"M d" }} at {{ activity.time }}</small>
+                                        {% if activity.animal %}
+                                            <small>{{ activity.animal.name }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="color: #666; font-style: italic;">No recent activities</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="no-employees">
+            <h2>No Employees Found</h2>
+            <p>No employee profiles are currently available.</p>
+        </div>
+    {% endfor %}
+
+    <div class="back-link">
+        <a href="{% url 'farm:user_dashboard' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
