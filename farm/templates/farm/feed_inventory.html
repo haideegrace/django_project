@@ -1,0 +1,177 @@
+{% extends 'farm/base.html' %}
+
+{% block title %}Feed Stock - Farm Inventory{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>🌾 Feed Stock</h1>
+        <p>View feed stock data.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'farm:export_feed_pdf' %}" class="btn btn-primary">
+            📄 Export to PDF
+        </a>
+    </div>
+</div>
+
+<!-- INVENTORY SUMMARY -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">🌾</div>
+        <div class="stat-content">
+            <div class="stat-value">{{ feeds|length }}</div>
+            <div class="stat-label">Feed Types</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_stock|floatformat:1 }}</div>
+            <div class="stat-label">Total Stock (kg)</div>
+        </div>
+    </div>
+    {% if low_feed_alerts %}
+        <div class="stat-card warning">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ low_feed_alerts|length }}</div>
+                <div class="stat-label">Low Stock Alerts</div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- LOW STOCK ALERTS -->
+{% if low_feed_alerts %}
+    <div class="alert alert-warning">
+        <h4>⚠️ Low Stock Alerts</h4>
+        <ul>
+            {% for feed in low_feed_alerts %}
+                <li><strong>{{ feed.name }}</strong>: {{ feed.current_stock }} kg remaining (Threshold: {{ feed.low_stock_threshold }} kg)</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- FEED INVENTORY -->
+<div class="card">
+    <div class="card-header">
+        <h3>Feed Stock</h3>
+    </div>
+    <div class="card-body">
+        {% if feeds %}
+            <div class="feed-grid">
+                {% for feed in feeds %}
+                    <div class="feed-card {% if feed.current_stock <= feed.low_stock_threshold %}low-stock{% endif %}">
+                        <div class="feed-header">
+                            <h4>{{ feed.name }}</h4>
+                            <span class="feed-stock {% if feed.current_stock <= feed.low_stock_threshold %}low{% else %}normal{% endif %}">
+                                {{ feed.current_stock }} {{ feed.unit }}
+                            </span>
+                        </div>
+                        <div class="feed-details">
+                            <p><strong>Low Stock Threshold:</strong> {{ feed.low_stock_threshold }} {{ feed.unit }}</p>
+                            {% if feed.description %}
+                                <p><strong>Description:</strong> {{ feed.description }}</p>
+                            {% endif %}
+                            <p><strong>Last Updated:</strong> {{ feed.updated_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🌾</div>
+                <div class="empty-state-title">No Feed Data</div>
+                <div class="empty-state-text">Feed stock information is shown here when available.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 16px;
+}
+
+.feed-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    background: var(--card-bg);
+    transition: box-shadow 0.2s;
+}
+
+.feed-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.feed-card.low-stock {
+    border-left: 4px solid var(--warning);
+    background: #fffbf0;
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.feed-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.feed-stock {
+    background: var(--success);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.feed-stock.low {
+    background: var(--warning);
+}
+
+.feed-details p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.feed-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.alert {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.alert h4 {
+    margin: 0 0 8px 0;
+    color: #856404;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.alert li {
+    color: #856404;
+}
+</style>
+
+{% endblock %}
