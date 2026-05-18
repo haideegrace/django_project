@@ -2,6 +2,13 @@
 
 A modern farm management system with Django REST API backend and React real-time frontend.
 
+# Farm Inventory Management System
+
+Developed by: HAIDEE GRACE CASTRO
+
+Copyright © 2026
+All Rights Reserved.
+
 ## 📋 Project Overview
 
 This is a comprehensive farm management solution that helps track:
